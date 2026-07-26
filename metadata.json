@@ -1,0 +1,10 @@
+{
+  "name": "Remix: Nova AI - Cyber Security Expert",
+  "description": "An elite-tier cyber security assistant with real-time voice interaction and terminal-style dashboard.",
+  "requestFramePermissions": [
+    "microphone",
+    "camera",
+    "geolocation",
+    "screen-wake-lock"
+  ]
+}

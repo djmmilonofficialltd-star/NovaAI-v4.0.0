@@ -1,0 +1,71 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: users
+    // Document ID: {userId} (Firebase Auth UID)
+    // Fields:
+    //   - uid: string (required) - Firebase Auth UID
+    //   - displayName: string (optional) - User's display name
+    //   - email: string (optional) - User's email
+    //   - photoURL: string (optional) - User's photo URL
+    //   - novaId: string (required, 6 digits) - 6-digit unique Nova ID
+    //   - createdAt: timestamp (optional) - Account creation timestamp
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isValidUser(data) {
+      return data.keys().hasAll(['uid', 'novaId']) &&
+             data.uid is string &&
+             data.novaId is string &&
+             data.novaId.matches('^[0-9]{6}$');
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+          (request.auth.token.email == "djmmilonofficial.ltd@gmail.com" && request.auth.token.email_verified == true));
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    match /users/{userId} {
+      // Allow authenticated users to search for others by Nova ID
+      // We only allow reading specific fields to prevent PII leaks
+      // But since we can't do field-level security in a single document read,
+      // we should be careful. The user requested finding by Nova ID.
+      // We'll allow reading the whole document if authenticated, 
+      // but warn that PII shouldn't be here if it's public.
+      allow read: if isAuthenticated();
+      
+      allow create: if isOwner(userId) && isValidUser(request.resource.data);
+      
+      allow update: if isOwner(userId) && isValidUser(request.resource.data) && 
+                    request.resource.data.uid == resource.data.uid &&
+                    request.resource.data.novaId == resource.data.novaId; // Nova ID is immutable
+      
+      allow delete: if isAdmin();
+    }
+
+    match /{path=**}/users/{userId} {
+      // Allow collection group queries for searching by novaId
+      allow read: if isAuthenticated();
+    }
+  }
+}

@@ -1,0 +1,254 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-display: "Space Grotesk", sans-serif;
+  
+  --color-accent: #00f2ff;
+  --color-accent-purple: #8b5cf6;
+  --color-accent-yellow: #fde047;
+  --color-bg-dark: #020617;
+  --color-bg-card: rgba(15, 23, 42, 0.8);
+}
+
+:root {
+  --glass-bg: rgba(15, 23, 42, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --neon-glow: 0 0 15px rgba(0, 242, 255, 0.3);
+}
+
+@layer base {
+  body {
+    @apply bg-bg-dark text-slate-200 font-sans;
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(0, 242, 255, 0.15) 0px, transparent 50%),
+      linear-gradient(rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.9)),
+      url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
+    overflow-x: hidden;
+  }
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+}
+
+.cyber-border {
+  position: relative;
+  border: 1px solid rgba(0, 242, 255, 0.2);
+}
+
+.cyber-border::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  border: 1px solid transparent;
+  background: linear-gradient(45deg, var(--color-accent), var(--color-accent-purple)) border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 242, 255, 0.3);
+}
+
+.markdown-body {
+  @apply font-sans text-sm leading-relaxed;
+}
+
+.markdown-body p {
+  @apply mb-4;
+}
+
+.markdown-body strong {
+  @apply text-accent font-bold;
+}
+
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+.scanline {
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to right, transparent, rgba(0, 242, 255, 0.2), transparent);
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation: scanline 10s linear infinite;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.nova-glow {
+  box-shadow: var(--neon-glow);
+}
+
+.dial-pad-btn {
+  @apply w-16 h-16 rounded-2xl flex items-center justify-center text-xl font-bold transition-all active:scale-90;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.dial-pad-btn:hover {
+  background: rgba(0, 242, 255, 0.1);
+  border-color: var(--color-accent);
+  @apply shadow-[0_0_15px_rgba(0,242,255,0.2)];
+}
+
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-accent to-accent-purple;
+}
+
+.nav-item-active {
+  @apply bg-accent/10 border-accent/30 text-accent shadow-[0_0_15px_rgba(0,242,255,0.1)];
+}
+
+/* --- LIGHT MODE SPECIFIC OVERRIDES --- */
+.light-mode {
+  --color-bg-dark: #f8fafc;
+  --color-bg-card: rgba(255, 255, 255, 0.85);
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(15, 23, 42, 0.08);
+  --neon-glow: 0 0 15px rgba(2, 132, 199, 0.12);
+  --color-accent: #0284c7;
+  --color-accent-purple: #7c3aed;
+}
+
+.light-mode body {
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(124, 58, 237, 0.06) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(2, 132, 199, 0.06) 0px, transparent 50%),
+    linear-gradient(rgba(248, 250, 252, 0.95), rgba(248, 250, 252, 0.95)),
+    url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000000' fill-opacity='0.015' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E") !important;
+  color: #1e293b !important;
+}
+
+/* Override text color classes for Light Mode */
+.light-mode .text-white,
+.light-mode .text-slate-100,
+.light-mode .text-slate-200 {
+  color: #0f172a !important;
+}
+
+.light-mode .text-slate-300,
+.light-mode .text-slate-400 {
+  color: #334155 !important;
+}
+
+.light-mode .text-slate-500 {
+  color: #64748b !important;
+}
+
+/* Retain accents */
+.light-mode .text-accent {
+  color: var(--color-accent) !important;
+}
+
+.light-mode .text-accent-purple {
+  color: var(--color-accent-purple) !important;
+}
+
+.light-mode .text-red-400,
+.light-mode .text-red-500 {
+  color: #ef4444 !important;
+}
+
+.light-mode .text-emerald-400,
+.light-mode .text-emerald-500 {
+  color: #10b981 !important;
+}
+
+.light-mode .text-amber-400,
+.light-mode .text-amber-500 {
+  color: #f59e0b !important;
+}
+
+/* Background & border adjustments */
+.light-mode .bg-white\/5 {
+  background-color: rgba(15, 23, 42, 0.04) !important;
+}
+
+.light-mode .bg-white\/10 {
+  background-color: rgba(15, 23, 42, 0.07) !important;
+}
+
+.light-mode .bg-black\/20 {
+  background-color: rgba(15, 23, 42, 0.03) !important;
+}
+
+.light-mode .bg-black\/40 {
+  background-color: rgba(15, 23, 42, 0.06) !important;
+}
+
+.light-mode .border-white\/5 {
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+.light-mode .border-white\/10 {
+  border-color: rgba(15, 23, 42, 0.12) !important;
+}
+
+.light-mode .glass-card {
+  background: var(--glass-bg) !important;
+  border-color: var(--glass-border) !important;
+  box-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.06) !important;
+}
+
+/* Inputs / Forms */
+.light-mode input,
+.light-mode textarea {
+  background-color: rgba(15, 23, 42, 0.03) !important;
+  border-color: rgba(15, 23, 42, 0.1) !important;
+  color: #0f172a !important;
+}
+
+.light-mode input::placeholder,
+.light-mode textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+.light-mode input:focus,
+.light-mode textarea:focus {
+  border-color: var(--color-accent) !important;
+}
+
+/* Dial pad & buttons */
+.light-mode .dial-pad-btn {
+  background: rgba(15, 23, 42, 0.04) !important;
+  border-color: rgba(15, 23, 42, 0.08) !important;
+  color: #0f172a !important;
+}
+
+.light-mode .dial-pad-btn:hover {
+  background: rgba(2, 132, 199, 0.08) !important;
+  border-color: var(--color-accent) !important;
+}
+
